@@ -1,0 +1,22 @@
+{
+  "name": "choo-drag-and-drop-sortable-tree-example",
+  "version": "1.0.0",
+  "description": "An example of a sortable tree of elements using choo",
+  "scripts": {
+    "start": "budo example.js -l -o -- -t nanohtml -t sheetify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nathan Herald <me@nathanherald.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "choo-devtools": "^2.5.1",
+    "nanohtml": "^1.2.4",
+    "sheetify": "^7.3.2",
+    "tachyons": "^4.10.0",
+    "tinyify": "^2.4.3"
+  },
+  "dependencies": {
+    "choo": "^6.12.1",
+    "nanoraf": "^3.0.1"
+  }
+}
