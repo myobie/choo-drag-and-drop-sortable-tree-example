@@ -4,12 +4,48 @@ module.exports = (state, emitter) => {
   emitter.emit(state.events.DOMTITLECHANGE, `Sortable tree example: ${state.headline}`)
 
   state.items = [
-    { id: 'one', title: 'One' },
-    { id: 'two', title: 'Two' },
-    { id: 'three', title: 'Three' },
-    { id: 'four', title: 'Four' },
-    { id: 'five', title: 'Five' },
-    { id: 'six', title: 'Six' }
+    {
+      type: 'group',
+      id: 'one',
+      title: 'Group One',
+      children: [
+        { type: 'item', id: 'one', title: 'One' },
+        { type: 'item', id: 'two', title: 'Two' },
+        { type: 'item', id: 'three', title: 'Three' },
+        { type: 'item', id: 'four', title: 'Four' },
+        { type: 'item', id: 'five', title: 'Five' },
+        { type: 'item', id: 'six', title: 'Six' }
+      ]
+    },
+    { type: 'item', id: 'middle', title: 'An item in-between two groups' },
+    {
+      type: 'group',
+      id: 'two',
+      title: 'Group Two',
+      children: [
+        { type: 'item', id: 'one two', title: 'One 2' },
+        { type: 'item', id: 'two two', title: 'Two 2' },
+        { type: 'item', id: 'three two', title: 'Three 2' },
+        {
+          type: 'group',
+          id: 'very-nested',
+          title: 'A very nested group',
+          children: [
+            { type: 'item', id: 'super-nested', title: 'A super nested item' }
+          ]
+        }
+      ]
+    },
+    {
+      type: 'group',
+      id: 'three',
+      title: 'Group Three',
+      children: [
+        { type: 'item', id: '🍎', title: '🍎' },
+        { type: 'item', id: '😓', title: '😓' },
+        { type: 'item', id: '⛈', title: '⛈' }
+      ]
+    }
   ]
 
   state.selectedItemID = null
