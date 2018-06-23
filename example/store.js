@@ -12,6 +12,8 @@ module.exports = (state, emitter) => {
     { id: 'six', title: 'Six' }
   ]
 
+  state.selectedItem = null
+
   function resetDragging () {
     state.dragging = {
       fromID: null,
@@ -42,6 +44,16 @@ module.exports = (state, emitter) => {
 
   emitter.on('dragend', () => {
     resetDragging()
+    render()
+  })
+
+  emitter.on('select', id => {
+    state.selectedItem = id
+    render()
+  })
+
+  emitter.on('deselect', () => {
+    state.selectedItem = null
     render()
   })
 
