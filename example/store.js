@@ -12,7 +12,7 @@ module.exports = (state, emitter) => {
     { id: 'six', title: 'Six' }
   ]
 
-  state.selectedItem = null
+  state.selectedItemID = null
 
   function resetDragging () {
     state.dragging = {
@@ -48,12 +48,12 @@ module.exports = (state, emitter) => {
   })
 
   emitter.on('select', id => {
-    state.selectedItem = id
+    state.selectedItemID = id
     render()
   })
 
   emitter.on('deselect', () => {
-    state.selectedItem = null
+    state.selectedItemID = null
     render()
   })
 
