@@ -5,9 +5,8 @@ const listStyles = css`
   :host {
     position: absolute;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
+    width: 100%;
   }
 `
 
@@ -28,8 +27,7 @@ const ghostItemStyles = css`
     background-color: white;
     padding: 6px 12px;
     height: 30px;
-    margin-bottom: 4px;
-    max-width: 20em;
+    margin: 4px;
     position: relative;
     transition: top 0.2s ease-in-out;
   }
@@ -73,7 +71,7 @@ const draggableItemStyles = css`
     background-color: white;
     padding: 6px 12px;
     height: 30px;
-    margin-bottom: 4px;
+    margin: 4px;
     max-width: 20em;
     position: relative;
   }

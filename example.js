@@ -2,7 +2,7 @@ const choo = require('choo')
 const html = require('choo/html')
 const css = require('sheetify')
 
-const mainView = require('./example/main-view')
+const sidebar = require('./example/sidebar-view')
 const store = require('./example/store')
 
 const app = choo()
@@ -41,7 +41,26 @@ const styles = css`
     right: 0;
     bottom: 45px;
     left: 0;
+  }
+
+  :host > main > aside {
     overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+  }
+
+  :host > main > section {
+    overflow-y: scroll;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 300px;
+    background: white;
+    padding: 40px;
   }
 
   :host > footer {
@@ -50,6 +69,8 @@ const styles = css`
     bottom: 0;
     left: 0;
     height: 45px;
+    background-color: black;
+    color: #eee;
   }
 `
 
@@ -60,7 +81,14 @@ app.route('*', (state, emit) => {
         <h1 class="ma0 pa1">${state.headline}</h1>
       </header>
       <main>
-        ${mainView(state, emit)}
+        <aside>
+          ${sidebar(state, emit)}
+        </aside>
+        <section>
+          ${Array(50).fill().map(() => {
+            return html`<p>Other stuff might go here</p>`
+          })}
+        </section>
       </main>
       <footer>
         <p class="ma0 pa1">You should be able to rearrange the above tree view.</p>
