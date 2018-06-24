@@ -42,6 +42,8 @@ function titleView (parents, item, path, state, emit) {
 }
 
 function opacity (state, path) {
+  if (!state.dragging.from) { return '0' }
+
   // show everyone except for the one being dragged
   if (state.helpers.isArrayEqual(state.dragging.from, path)) {
     return '0'

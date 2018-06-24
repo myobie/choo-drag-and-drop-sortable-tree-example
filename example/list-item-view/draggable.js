@@ -59,23 +59,31 @@ function titleView (parents, item, path, state, emit) {
   }
 
   function dragover (e) {
-    e.preventDefault()
+    e.preventDefault() // allow drop
 
+    // console.debug([e.screenX, e.screenY, e])
+    // var el = e.target
+    // console.debug(el.getBoundingClientRect())
+
+    // track when we change where we are
     if (!state.helpers.isArrayEqual(state.dragging.over, path)) {
       emit('dragover', path)
     }
   }
 
   function dragenter (e) {
+    e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
   }
 
   function dragleave (e) {
+    e.preventDefault()
     e.dataTransfer.dropEffect = 'none'
   }
 
   function drop (e) {
     e.stopPropagation()
+    e.preventDefault()
 
     if (!state.helpers.isArrayEqual(state.dragging.from, path)) {
       const data = e.dataTransfer.getData('application/json')
@@ -84,6 +92,8 @@ function titleView (parents, item, path, state, emit) {
   }
 
   function dragend (e) {
+    e.preventDefault()
+
     emit('dragend')
   }
 
