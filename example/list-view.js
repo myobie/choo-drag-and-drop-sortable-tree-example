@@ -6,51 +6,51 @@ const draggableItemView = require('./list-item-view/draggable')
 
 const styles = css`
   :host {
-    position: relative;
-    padding: 0;
-    margin-bottom: 4px;
-    overflow: hidden;
   }
 `
 
-const ghostStyles = css`
+const ghostWrapperStyles = css`
   :host {
     z-index: 2;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    overflow: hidden;
   }
 `
 
-const draggableStyles = css`
+const listStyles = css`
   :host {
-    z-index: 99;
     position: relative;
     width: 100%;
-    overflow: hidden;
   }
 `
-
-const ghostListView = createListView(ghostStyles, ghostItemView)
-const draggableListView = createListView(draggableStyles, draggableItemView)
 
 module.exports = view
 
-function view (items, state, emit) {
+function view (parents, children, state, emit) {
   return html`
     <div class=${styles}>
-      ${ghostListView(items, state, emit)}
-      ${draggableListView(items, state, emit)}
+      <div class=${ghostWrapperStyles}>
+        ${ghostListView(parents, children, state, emit)}
+      </div>
+      ${draggableListView(parents, children, state, emit)}
     </div>
   `
 }
 
-function createListView (listStyles, itemView) {
-  return (items, state, emit) => html`
+function ghostListView (parents, children, state, emit) {
+  return html`
     <ul class="list ma0 pa0 ${listStyles}">
-      ${items.map(item => itemView(item, state, emit))}
+      ${children.map(item => ghostItemView(ghostListView, parents, item, state, emit))}
+    </ul>
+  `
+}
+
+function draggableListView (parents, children, state, emit) {
+  return html`
+    <ul class="list ma0 pa0 ${listStyles}" style="z-index: 999;">
+      ${children.map(item => draggableItemView(draggableListView, parents, item, state, emit))}
     </ul>
   `
 }

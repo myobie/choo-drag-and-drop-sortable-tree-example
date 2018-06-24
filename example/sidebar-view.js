@@ -12,6 +12,6 @@ const styles = css`
 
 module.exports = (state, emit) => html`
   <div class=${styles} onclick=${_ => emit('deselect')}>
-    ${listView(state.items, state, emit)}
+    ${listView([], state.db.children, state, emit)}
   </div>
 `

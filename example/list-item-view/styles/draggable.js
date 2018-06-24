@@ -1,7 +1,0 @@
-const shared = require('./shared')
-
-module.exports = `
-  :host {
-    ${shared}
-  }
-`
