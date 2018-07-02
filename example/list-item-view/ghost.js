@@ -42,7 +42,7 @@ function titleView (parents, item, path, state, emit) {
 }
 
 function opacity (state, path) {
-  if (!state.dragging.from) { return '0' }
+  if (!state.isDragging) { return '0' }
 
   // show everyone except for the one being dragged
   if (state.helpers.isArrayEqual(state.dragging.from, path)) {
@@ -53,6 +53,8 @@ function opacity (state, path) {
 }
 
 function top (state, path) {
+  if (!state.isOver) { return '0' }
+
   let indexes = state.helpers.indexesOf(path)
 
   if (state.dragging.fromIndexes < indexes && indexes <= state.dragging.overIndexes) {
