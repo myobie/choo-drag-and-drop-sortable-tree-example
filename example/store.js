@@ -88,44 +88,72 @@ module.exports = (state, emitter) => {
     let lowestSegment = 0
     let highestSegment = 0
 
-    // const fromLevelt = state.dragging.from.length - 1
     const overLevel = state.dragging.over.length - 1
-    // const overLastIndex = state.dragging.overIndexes[state.dragging.overIndexes.length - 1]
+    const overItemIndex = state.dragging.overIndexes[state.dragging.overIndexes.length - 1]
 
     if (state.dragging.fromIndexes < state.dragging.overIndexes) {
       // from above
+      const over = findItemByIndexes(state.dragging.overIndexes)
+      const parent = findParent(state.dragging.overIndexes)
+
+      if (over.type === 'group') {
+        // must put it into the group if coming from above (will end up being the first item in the group)
+        highestSegment = lowestSegment = overLevel + 1
+      } else if (parent && parent.type === 'group' && overItemIndex === parent.children.length - 1) {
+        // if the parent is a group and the item we are over is the last item then we can exit the group or we can be the last item of the group
+        lowestSegment = overLevel - 1
+        highestSegment = overLevel
+      } else {
+        // else we must simply replace the item we are over at it's same level
+        lowestSegment = highestSegment = overLevel
+      }
     } else if (state.dragging.fromIndexes > state.dragging.overIndexes) {
       // from below
-    } else {
-      // same item
       const prev = prevSiblingItem(state.dragging.overIndexes)
+
       if (prev && prev.type === 'group') {
+        // is the item directly before us is a group, then we can enter the group as it's last item or simply replace the item we are over
         lowestSegment = overLevel
         highestSegment = overLevel + 1
       } else {
         lowestSegment = highestSegment = overLevel
       }
-    }
+    } else {
+      // same item
+      const prev = prevSiblingItem(state.dragging.overIndexes)
+      const parent = findParent(state.dragging.overIndexes)
 
-    console.debug('possible segments', [lowestSegment, highestSegment])
-
-    let realSegment = segment
-
-    if (segment < lowestSegment) {
-      realSegment = lowestSegment
-    }
-
-    if (segment > highestSegment) {
-      realSegment = highestSegment
+      if (prev && prev.type === 'group') {
+        // if the item directly above us is a group, then we can enter that group as it's last item or we can stay where we are at right now
+        lowestSegment = overLevel
+        highestSegment = overLevel + 1
+      } else if (parent && parent.type === 'group' && overItemIndex === parent.children.length - 1) {
+        // if the parent is a group and the item we are over is the last item then we can exit the group or we can remain as the last item of the group
+        lowestSegment = overLevel - 1
+        highestSegment = overLevel
+      } else {
+        // else we must simply stay where we are
+        lowestSegment = highestSegment = overLevel
+      }
     }
 
     state.dragging.overMouseSegment = segment
-    state.dragging.overSegment = realSegment
-
-    console.debug('over segment', state.dragging.overSegment)
+    state.dragging.overSegment = closestSegment(lowestSegment, highestSegment, segment)
 
     render()
   })
+
+  function closestSegment (lowest, highest, desired) {
+    if (desired < lowest) {
+      return lowest
+    }
+
+    if (desired > highest) {
+      return highest
+    }
+
+    return desired
+  }
 
   emitter.on('dragenter', path => {
     state.isOver = true
@@ -137,15 +165,36 @@ module.exports = (state, emitter) => {
 
   emitter.on('dragleave', path => {
     state.isOver = false
-    state.dragging.over = null
-    state.dragging.overIndexes = null
-    state.dragging.overItem = null
+    state.dragging.overMouseSegment = null
     render()
   })
 
   emitter.on('drop', ({ path, data }) => {
+    // const overLevel = state.dragging.over.length - 1
+    //
+    // if (state.dragging.fromIndexes < state.dragging.overIndexes) {
+    //   // from above
+    //   if (overLevel === state.dragging.overSegment) {
+    //   }
+    //   const over = findItemByIndexes(state.dragging.overIndexes)
+    //   if (over.type === 'group') {
+    //   } else {
+    //   }
+    // } else if (state.dragging.fromIndexes > state.dragging.overIndexes) {
+    //   // from below
+    //   const prev = prevSiblingItem(state.dragging.overIndexes)
+    //   if (prev && prev.type === 'group') {
+    //   } else {
+    //   }
+    // } else {
+    //   // same item
+    //   const prev = prevSiblingItem(state.dragging.overIndexes)
+    //   if (prev && prev.type === 'group') {
+    //   } else {
+    //   }
+    // }
+
     insertItemAfterItem(state.dragging.from, path)
-    // dragend will render
   })
 
   emitter.on('dragend', () => {

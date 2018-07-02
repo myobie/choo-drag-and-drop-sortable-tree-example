@@ -53,8 +53,6 @@ function opacity (state, path) {
 }
 
 function top (state, path) {
-  if (!state.isOver) { return '0' }
-
   let indexes = state.helpers.indexesOf(path)
 
   if (state.dragging.fromIndexes < indexes && indexes <= state.dragging.overIndexes) {
