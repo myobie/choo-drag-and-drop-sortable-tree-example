@@ -11,7 +11,7 @@
   "devDependencies": {
     "choo-devtools": "^2.5.1",
     "nanohtml": "^1.2.4",
-    "sheetify": "^7.3.2",
+    "sheetify": "^7.3.3",
     "tachyons": "^4.10.0",
     "tinyify": "^2.4.3"
   },
