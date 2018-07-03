@@ -158,10 +158,7 @@ module.exports = (state, emitter) => {
     const prevPath = prevSiblingPath(overPath)
     const parent = findItem(parentPath)
 
-    console.log(overPath, 'over', over)
-
     if (isAbove(fromPath, overPath)) {
-      console.debug('is from above')
       // from above
       if (over.type === 'group') {
         // must put it into the group if coming from above (will end up being the first item in the group)
@@ -190,7 +187,6 @@ module.exports = (state, emitter) => {
         patch = { insertAt: overPath, type: 'after' } // insert after the item we are over
       }
     } else if (isBelow(fromPath, overPath)) {
-      console.debug('is from below')
       // from below
       if (prev && prev.type === 'group') {
         // if the item directly before us is a group, then we can enter the group as it's last item or simply replace the item we are over
@@ -213,7 +209,6 @@ module.exports = (state, emitter) => {
         patch = { insertAt: overPath, type: 'before' } // insert before the item we are over
       }
     } else {
-      console.debug('is same item')
       // same item
       if (prev && prev.type === 'group') {
         // if the item directly above us is a group, then we can enter that group as it's last item or we can stay where we are at right now
@@ -262,8 +257,6 @@ module.exports = (state, emitter) => {
     if (!state.dragging.dropPatch) { return }
 
     const patch = state.dragging.dropPatch
-
-    console.debug('patch', patch)
 
     if (!(patch.insertAt || patch.appendTo || patch.prependTo)) { return }
 
@@ -373,8 +366,6 @@ module.exports = (state, emitter) => {
     if (!Array.isArray(parent.children)) { return false }
 
     const actualLastChild = parent.children[parent.children.length - 1]
-
-    console.debug('is last item in', child, actualLastChild)
 
     return isSameItem(child, actualLastChild)
   }
