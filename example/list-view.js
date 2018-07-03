@@ -61,7 +61,7 @@ function ghost (parents, children, state, emit) {
 function ghostListView (parents, children, state, emit) {
   return html`
     <ul class="list ma0 pa0 ${listStyles}">
-      ${children.map(item => ghostItemView(ghostListView, parents, item, state, emit))}
+      ${children.map((item, index) => ghostItemView(ghostListView, parents, item, index, state, emit))}
     </ul>
   `
 }
@@ -81,7 +81,7 @@ function droppable (parents, children, state, emit) {
 function droppableListView (parents, children, state, emit) {
   return html`
     <ul class="list ma0 pa0 ${listStyles}">
-      ${children.map(item => droppableItemView(droppableListView, parents, item, state, emit))}
+      ${children.map((item, index) => droppableItemView(droppableListView, parents, item, index, state, emit))}
     </ul>
   `
 }
@@ -97,7 +97,7 @@ function draggable (parents, children, state, emit) {
 function draggableListView (parents, children, state, emit) {
   return html`
     <ul class="list ma0 pa0 ${listStyles}">
-      ${children.map(item => draggableItemView(draggableListView, parents, item, state, emit))}
+      ${children.map((item, index) => draggableItemView(draggableListView, parents, item, index, state, emit))}
     </ul>
   `
 }

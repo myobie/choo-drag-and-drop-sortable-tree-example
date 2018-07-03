@@ -37,13 +37,13 @@ const markerStyles = css`
   }
 `
 
-module.exports = (listView, parents, item, state, emit) => {
-  const path = parents.concat([item._cid])
+module.exports = (listView, parents, item, index, state, emit) => {
+  const path = parents.concat([index])
 
   return html`
-    <li class=${styles} data-cid=${item._cid}>
+    <li class=${styles} data-cid=${item._cid} data-index=${index}>
       ${titleView(parents, item, path, state, emit)}
-      ${nestedListView(listView, parents, item, path, state, emit, { indent: false })}
+      ${nestedListView(listView, item, path, state, emit, { indent: false })}
     </li>
   `
 }

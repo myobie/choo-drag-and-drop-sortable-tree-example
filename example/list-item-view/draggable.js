@@ -18,13 +18,13 @@ const titleStyles = css`
   }
 `
 
-module.exports = (listView, parents, item, state, emit) => {
-  const path = parents.concat([item._cid])
+module.exports = (listView, parents, item, index, state, emit) => {
+  const path = parents.concat([index])
 
   return html`
-    <li class=${styles} data-cid=${item._cid}>
+    <li class=${styles} data-cid=${item._cid} data-index=${index}>
       ${titleView(parents, item, path, state, emit)}
-      ${nestedListView(listView, parents, item, path, state, emit)}
+      ${nestedListView(listView, item, path, state, emit)}
     </li>
   `
 }
@@ -64,7 +64,7 @@ function titleView (parents, item, path, state, emit) {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!state.selectedItem || state.selectedItem._cid !== item._cid) {
+    if (!state.selectedItem || !state.helpers.isSameItem(state.selectedItem, item)) {
       emit('select', item)
     }
   }

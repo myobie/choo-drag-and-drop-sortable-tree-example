@@ -158,6 +158,8 @@ module.exports = (state, emitter) => {
     const prevPath = prevSiblingPath(overPath)
     const parent = findItem(parentPath)
 
+    console.log(overPath, 'over', over)
+
     if (isAbove(fromPath, overPath)) {
       console.debug('is from above')
       // from above
@@ -332,6 +334,22 @@ module.exports = (state, emitter) => {
     return findItem(path)
   }
 
+  function isItemWithCID (item, cid) {
+    return item._cid === cid
+  }
+
+  function isSameItem (left, right) {
+    return left._cid === right._cid
+  }
+
+  function compareCID (cid) {
+    return item => { return isItemWithCID(item, cid) }
+  }
+
+  function compareItem (item) {
+    return compareCID(item._cid)
+  }
+
   function findItem (path) {
     let item = state.db
     let scope = item.children
@@ -339,7 +357,7 @@ module.exports = (state, emitter) => {
     for (let i of path) {
       if (!Array.isArray(scope)) { return null }
 
-      item = scope.find(child => child._cid === i)
+      item = scope[i]
 
       if (item) {
         scope = item.children
@@ -358,88 +376,46 @@ module.exports = (state, emitter) => {
 
     console.debug('is last item in', child, actualLastChild)
 
-    return actualLastChild._cid === child._cid
-  }
-
-  function indexesFromPath (path) {
-    if (path === null) { return null }
-
-    let indexes = []
-    let scope = state.db.children
-
-    for (let i of path) {
-      if (!Array.isArray(scope)) { return null }
-
-      const index = scope.findIndex(child => child._cid === i)
-
-      if (index !== -1) {
-        indexes.push(index)
-        scope = scope[index].children
-      } else {
-        return null
-      }
-    }
-
-    return indexes
+    return isSameItem(child, actualLastChild)
   }
 
   function indexOfChild (parent, item) {
-    return parent.children.findIndex(child => child._cid === item._cid)
+    return parent.children.findIndex(compareItem(item))
   }
 
   function isAbove (first, second) {
-    const firstIndexes = indexesFromPath(first)
-    const secondIndexes = indexesFromPath(second)
-
-    return firstIndexes < secondIndexes
+    return first < second
   }
 
   function isAboveOrEqual (first, second) {
-    const firstIndexes = indexesFromPath(first)
-    const secondIndexes = indexesFromPath(second)
-
-    return firstIndexes <= secondIndexes
+    return first <= second
   }
 
   function isBelow (first, second) {
-    const firstIndexes = indexesFromPath(first)
-    const secondIndexes = indexesFromPath(second)
-
-    return firstIndexes > secondIndexes
+    return first > second
   }
 
   function isBelowOrEqual (first, second) {
-    const firstIndexes = indexesFromPath(first)
-    const secondIndexes = indexesFromPath(second)
-
-    return firstIndexes >= secondIndexes
+    return first >= second
   }
 
   function prevSiblingPath (path) {
-    const indexes = indexesFromPath(path)
-    const localIndex = indexes[indexes.length - 1]
+    const localIndex = path[path.length - 1]
 
     if (localIndex === 0) {
       return null
     } else {
       const parentPath = path.slice(0, -1)
-      const parent = findItem(parentPath)
-      const prevItem = parent.children[localIndex - 1]
-      return parentPath.concat([prevItem._cid])
+      return parentPath.concat([localIndex - 1])
     }
   }
 
   function prevSiblingItem (path) {
-    const indexes = indexesFromPath(path)
-    const localIndex = indexes[indexes.length - 1]
+    const prevPath = prevSiblingPath(path)
 
-    if (localIndex === 0) {
-      return null
-    } else {
-      const parentPath = path.slice(0, -1)
-      const parent = findItem(parentPath)
-      return parent.children[localIndex - 1]
-    }
+    if (!prevPath) { return null }
+
+    return findItem(prevPath)
   }
 
   function isArrayEqual (left, right) {
