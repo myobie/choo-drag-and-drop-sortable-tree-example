@@ -1,62 +1,62 @@
 const html = require('choo/html')
 const css = require('sheetify')
 const backgroundColor = require('./background-color')
+const nestedListView = require('./nested-list')
 
-const styles = css('./styles/draggable.js')
+const styles = css`
+  :host {
+    box-sizing: border-box;
+    position: relative;
+  }
+`
 
-module.exports = (item, state, emit) => {
-  const inlineStyles = `opacity: ${opacity(state, item)}; background-color: ${backgroundColor(state, item)};`
+const titleStyles = css`
+  :host {
+    margin: 4px;
+    margin-bottom: 0;
+    padding: 6px 12px;
+  }
+`
+
+module.exports = (listView, parents, item, index, state, emit) => {
+  const path = parents.concat([index])
 
   return html`
-    <li
+    <li class=${styles} data-cid=${item._cid} data-index=${index}>
+      ${titleView(parents, item, path, state, emit)}
+      ${nestedListView(listView, item, path, state, emit)}
+    </li>
+  `
+}
+
+function titleView (parents, item, path, state, emit) {
+  const zindex = 999 - parents.length
+  const inlineStyles = `z-index: ${zindex}; opacity: ${opacity(state)}; background-color: ${backgroundColor(state, item)};`
+
+  return html`
+    <p
       draggable="true"
       ondragstart=${dragstart}
-      ondragover=${dragover}
-      ondragenter=${dragenter}
-      ondragleave=${dragleave}
-      ondrop=${drop}
       ondragend=${dragend}
       onclick=${select}
-      class=${styles}"
+      class=${titleStyles}
       style=${inlineStyles}>
       ${item.title}
-    </li>
+    </p>
   `
 
   function dragstart (e) {
     e.dataTransfer.effectAllowed = 'move'
 
-    const data = JSON.stringify({ item })
+    const data = JSON.stringify({ path })
     e.dataTransfer.setData('application/json', data)
 
-    emit('dragstart', item.id)
-  }
-
-  function dragover (e) {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-
-    if (state.dragging.overID !== item.id) {
-      emit('dragover', item.id)
-    }
-  }
-
-  function dragenter (e) {
-  }
-
-  function dragleave (e) {
-  }
-
-  function drop (e) {
-    e.stopPropagation()
-
-    if (state.dragging.fromID !== item.id) {
-      const data = e.dataTransfer.getData('application/json')
-      emit('drop', { id: item.id, data })
-    }
+    emit('dragstart', path)
   }
 
   function dragend (e) {
+    e.preventDefault()
+
     emit('dragend')
   }
 
@@ -64,14 +64,14 @@ module.exports = (item, state, emit) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (state.selectedItemID !== item.id) {
-      emit('select', item.id)
+    if (!state.selectedItem || !state.helpers.isSameItem(state.selectedItem, item)) {
+      emit('select', item)
     }
   }
 }
 
-function opacity (state, item) {
-  if (state.dragging.fromID) {
+function opacity (state) {
+  if (state.isDragging) {
     return '0'
   } else {
     return '1'
