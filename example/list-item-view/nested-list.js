@@ -14,8 +14,7 @@ module.exports = (view, parents, item, path, state, emit, options = {}) => {
   // if this is the currently dragged item, then don't render it's children
   if (state.helpers.isArrayEqual(state.dragging.from, path)) { return '' }
 
-  parents = parents.slice(0) // copy
-  parents.push(item)
+  parents = path
 
   let inlineStyles = ''
 

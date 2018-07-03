@@ -21,10 +21,10 @@ const titleStyles = css`
 `
 
 module.exports = (listView, parents, item, state, emit) => {
-  const path = state.helpers.pathOfItem(parents, item)
+  const path = parents.concat([item._cid])
 
   return html`
-    <li class=${styles}>
+    <li class=${styles} data-cid=${item._cid}>
       ${titleView(parents, item, path, state, emit)}
       ${nestedListView(listView, parents, item, path, state, emit)}
     </li>
@@ -53,12 +53,17 @@ function opacity (state, path) {
 }
 
 function top (state, path) {
-  let indexes = state.helpers.indexesOf(path)
+  const from = state.dragging.from
+  const over = state.dragging.over
+  const isAbove = state.helpers.isAbove
+  const isAboveOrEqual = state.helpers.isAboveOrEqual
+  const isBelow = state.helpers.isBelow
+  const isBelowOrEqual = state.helpers.isBelowOrEqual
 
-  if (state.dragging.fromIndexes < indexes && indexes <= state.dragging.overIndexes) {
+  if (isAbove(from, path) && isAboveOrEqual(path, over)) {
     // came from above and I am between where it was and where it wants to go
     return '-34px'
-  } else if (state.dragging.fromIndexes > indexes && indexes >= state.dragging.overIndexes) {
+  } else if (isBelow(from, path) && isBelowOrEqual(path, over)) {
     // came from below and I am between where it was and where it wants to go
     return '34px'
   } else {

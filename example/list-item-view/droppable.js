@@ -38,10 +38,10 @@ const markerStyles = css`
 `
 
 module.exports = (listView, parents, item, state, emit) => {
-  const path = state.helpers.pathOfItem(parents, item)
+  const path = parents.concat([item._cid])
 
   return html`
-    <li class=${styles}>
+    <li class=${styles} data-cid=${item._cid}>
       ${titleView(parents, item, path, state, emit)}
       ${nestedListView(listView, parents, item, path, state, emit, { indent: false })}
     </li>
@@ -100,10 +100,8 @@ function titleView (parents, item, path, state, emit) {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!state.helpers.isArrayEqual(state.dragging.from, path)) {
-      const data = e.dataTransfer.getData('application/json')
-      emit('drop', { path, data })
-    }
+    const data = e.dataTransfer.getData('application/json')
+    emit('drop', { path, data })
   }
 }
 
