@@ -58,7 +58,6 @@ module.exports = (state, emitter) => {
     ]
   })
 
-  state.selected = null
   state.selectedItem = null
 
   resetDragging() // start out resetted
@@ -99,14 +98,12 @@ module.exports = (state, emitter) => {
     render()
   })
 
-  emitter.on('select', path => {
-    state.selected = path
-    state.selectedItem = findItem(path)
+  emitter.on('select', item => {
+    state.selectedItem = item
     render()
   })
 
   emitter.on('deselect', () => {
-    state.selected = null
     state.selectedItem = null
     render()
   })
@@ -307,29 +304,6 @@ module.exports = (state, emitter) => {
         fromParent.children.splice(fromItemEndIndex, 1) // remove
       }
     }
-
-    if (state.selected) {
-      console.debug('something is selected')
-
-      const selected = state.selected.slice()
-
-      if (isChildOf(fromPath, selected)) {
-        console.debug('moved a parent of the selected item')
-
-        // if (ancestors.length > 0) {
-        //   console.log('we share a common ancestor')
-        //
-        //   const uncommon = state.selected.slice(ancestors.length - 1)
-        //   const combined = ancestors.concat(uncommon)
-        //
-        //   console.debug('combined', combined)
-        //
-        //   state.selected = combined
-        // }
-      }
-    }
-
-    // TODO: update the selected stuff if the selected item or any of it's ancesters were part of the dragged item
   }
 
   function closestSegment (lowest, highest, desired) {

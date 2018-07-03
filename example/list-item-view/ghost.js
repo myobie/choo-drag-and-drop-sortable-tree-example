@@ -32,7 +32,7 @@ module.exports = (listView, parents, item, state, emit) => {
 }
 
 function titleView (parents, item, path, state, emit) {
-  const inlineStyles = `top: ${top(state, path)}; opacity: ${opacity(state, path)}; background-color: ${backgroundColor(state, path)};`
+  const inlineStyles = `top: ${top(state, path)}; opacity: ${opacity(state, path)}; background-color: ${backgroundColor(state, item)};`
 
   return html`
     <p class=${titleStyles} style=${inlineStyles}>

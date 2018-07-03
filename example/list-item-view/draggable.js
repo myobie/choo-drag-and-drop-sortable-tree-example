@@ -31,7 +31,7 @@ module.exports = (listView, parents, item, state, emit) => {
 
 function titleView (parents, item, path, state, emit) {
   const zindex = 999 - parents.length
-  const inlineStyles = `z-index: ${zindex}; opacity: ${opacity(state)}; background-color: ${backgroundColor(state, path)};`
+  const inlineStyles = `z-index: ${zindex}; opacity: ${opacity(state)}; background-color: ${backgroundColor(state, item)};`
 
   return html`
     <p
@@ -64,8 +64,8 @@ function titleView (parents, item, path, state, emit) {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!state.helpers.isArrayEqual(state.selected, path)) {
-      emit('select', path)
+    if (!state.selectedItem || state.selectedItem._cid !== item._cid) {
+      emit('select', item)
     }
   }
 }

@@ -1,5 +1,5 @@
-module.exports = (state, path) => {
-  if (state.helpers.isArrayEqual(state.selected, path)) {
+module.exports = (state, item) => {
+  if (state.selectedItem && state.selectedItem._cid === item._cid) {
     return 'yellow'
   } else {
     return 'white'
