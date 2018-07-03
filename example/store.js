@@ -263,12 +263,12 @@ module.exports = (state, emitter) => {
     const patchPath = patch.insertAt || patch.prependTo || patch.appendTo
     const patchItem = findItem(patchPath)
     const patchParent = findParent(patchPath)
-    const patchItemEndIndex = indexOfChild(patchParent, patchItem)
+    const patchItemEndIndex = patchPath[patchPath.length - 1]
 
     const fromPath = state.dragging.from
     const fromItem = findItem(fromPath)
     const fromParent = findParent(fromPath)
-    const fromItemEndIndex = indexOfChild(fromParent, fromItem)
+    const fromItemEndIndex = fromPath[fromPath.length - 1]
 
     if (patch.appendTo) {
       const endIndex = patchItem.children.length
@@ -283,9 +283,10 @@ module.exports = (state, emitter) => {
       if (patch.type === 'after') { insertIndex = patchItemEndIndex + 1 }
 
       if (isSibling(patchPath, fromPath)) {
-        // if we are in the same group then we gotta change the from item so we
-        // can insert it and then find the old from to remove it or else we might
-        // find the new from depending on the new order of the group
+        // if we are in the same group, then we do a swap with a placeholder so
+        // the order doesn't change before we re-insert so we don't have to
+        // re-calc where the insert may have moved to becuase of the removal or
+        // is that just confusing?
 
         const placeholder = { _cid: 'placeholder' }
 
