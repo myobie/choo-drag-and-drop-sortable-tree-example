@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "An example of a sortable tree of elements using choo",
   "scripts": {
-    "start": "budo example.js -l -o -- -t nanohtml -t sheetify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "budo example.js -l -o -- -t nanohtml -t sheetify"
   },
   "author": "Nathan Herald <me@nathanherald.com>",
   "license": "MIT",
   "devDependencies": {
+    "budo": "^11.3.2",
     "choo-devtools": "^2.5.1",
     "nanohtml": "^1.2.4",
     "sheetify": "^7.3.3",
