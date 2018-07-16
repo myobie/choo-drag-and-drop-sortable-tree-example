@@ -54,7 +54,16 @@ module.exports = (state, emitter) => {
           { type: 'item', id: '😓', title: '😓' },
           { type: 'item', id: '⛈', title: '⛈' }
         ]
-      }
+      },
+      { type: 'item', id: 'other-one', title: 'Other One' },
+      { type: 'item', id: 'other-two', title: 'Other Two' },
+      { type: 'item', id: 'other-three', title: 'Other Three' },
+      { type: 'item', id: 'other-four', title: 'Other Four' },
+      { type: 'item', id: 'other-five', title: 'Other Five' },
+      { type: 'item', id: 'other-six', title: 'Other Six' },
+      { type: 'item', id: 'other-seven', title: 'Other Seven' },
+      { type: 'item', id: 'other-eight', title: 'Other Eight' },
+      { type: 'item', id: 'other-nine', title: 'Other Nine' }
     ]
   })
 
@@ -374,6 +383,8 @@ module.exports = (state, emitter) => {
   function indexOfChild (parent, item) {
     return parent.children.findIndex(compareItem(item))
   }
+
+  // FIXME: these comparisons do not work because it compares the array elements as strings so '11' is less then '2'
 
   function isAbove (first, second) {
     return first < second
