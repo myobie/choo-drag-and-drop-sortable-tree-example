@@ -18,6 +18,8 @@ const titleStyles = css`
   }
 `
 
+// FIXME: don't allow multi-line items
+
 module.exports = (listView, parents, item, index, state, emit) => {
   const path = parents.concat([index])
 

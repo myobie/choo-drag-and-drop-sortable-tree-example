@@ -50,6 +50,8 @@ function view (parents, children, state, emit) {
   `
 }
 
+// FIXME: merge all the views together so we don't have three lists but instead have three things inside each list item
+
 function ghost (parents, children, state, emit) {
   return html`
     <div class=${ghostWrapperStyles}>
